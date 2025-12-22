@@ -33,9 +33,6 @@ FROM nginx:1.28-alpine
 # Copy the build artifacts from the build stage to Nginx's default web directory
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Replace the default Nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
 # Expose HTTP port
 EXPOSE 80
 
