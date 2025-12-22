@@ -1,0 +1,14 @@
+# Frontend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: dev
+spec:
+  type: ClusterIP
+  selector:
+    app: react
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
