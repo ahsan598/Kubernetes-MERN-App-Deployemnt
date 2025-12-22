@@ -1,10 +1,14 @@
-import React from "react";
+import React, { Component } from "react";
 import Tasks from "./Tasks";
-import { Paper, TextField, Checkbox, Button } from "@mui/material";
-import "./App.css"; // Update your CSS file accordingly
+import { Paper, TextField, Button } from "@mui/material";
+import "./App.css";
 
-class App extends Tasks {
-    state = { tasks: [], currentTask: "" };
+class App extends Component {
+    state = { currentTask: "" };
+
+    handleChange = (e) => {
+        this.setState({ currentTask: e.target.value });
+    };
 
     render() {
         const { tasks, currentTask } = this.state;

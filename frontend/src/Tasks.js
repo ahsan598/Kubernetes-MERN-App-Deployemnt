@@ -5,6 +5,7 @@ import {
     updateTask,
     deleteTask,
 } from "./services/taskServices";
+import { Paper, Checkbox, Button } from "@mui/material";
 
 class Tasks extends Component {
     state = { tasks: [], currentTask: "" };
@@ -14,7 +15,8 @@ class Tasks extends Component {
             const { data } = await getTasks();
             this.setState({ tasks: data });
         } catch (error) {
-            console.log(error);
+            console.error("API failed", error);
+            this.setState({ tasks: [] });
         }
     }
 
