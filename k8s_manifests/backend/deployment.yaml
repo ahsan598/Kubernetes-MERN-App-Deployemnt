@@ -3,9 +3,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
-  namespace: dev
+  namespace: todo-lab
   labels:
-    app: backend
+    app: todo-backend
+    env: dev
 spec:
   replicas: 2
   strategy:
@@ -15,21 +16,21 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app: backend
+      app: todo-backend
   template:
     metadata:
       labels:
-        app: backend
+        app: todo-backend
     spec:
       containers:
       - name: backend
-        image: ahsan98/mern-app:node-1.0
+        image: ahsan98/mernapp:backend
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 8080         # Port matching index.js
-          name: http
+        - name: backend-port
+          containerPort: 8080         # Port matching index.js
+
         env:
-        # Environment variable names from ConfigMap
         - name: MONGO_CONN_STR
           valueFrom:
             configMapKeyRef:
@@ -45,7 +46,7 @@ spec:
             configMapKeyRef:
               name: backend-config
               key: PORT
-        # MongoDB credentials from Secret
+
         - name: MONGO_USERNAME
           valueFrom:
             secretKeyRef:
@@ -56,21 +57,20 @@ spec:
             secretKeyRef:
               name: mongo-secret
               key: password
-        # Correct health checks
+
         livenessProbe:
           httpGet:
             path: /ok
-            port: 8080
+            port: backend-port
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: /ok
-            port: 8080
+            port: backend-port
           initialDelaySeconds: 5
           periodSeconds: 5
-          timeoutSeconds: 3
+
         resources:
           requests:
             memory: "256Mi"

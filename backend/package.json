@@ -1,8 +1,9 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "Basic Express + Mongoose API",
+  "description": "Backend API server",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js"
@@ -12,10 +13,11 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "mongoose": "^5.12.14"
+    "express": "^4.19.1",
+    "mongoose": "^8.1.1",
+    "dotenv": "^16.4.1"
   },
   "devDependencies": {
-    "nodemon": "^3.0.0"
+    "nodemon": "^3.0.2"
   }
 }

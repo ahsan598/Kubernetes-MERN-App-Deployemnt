@@ -1,30 +1,19 @@
-// db.js (Updated for Kubernetes)
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-module.exports = async () => {
+module.exports = async function connectDB() {
   try {
-    const connectionParams = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    };
+    const options = {};
 
-    const useDBAuth = process.env.USE_DB_AUTH === 'true';
-    if (useDBAuth) {
-      connectionParams.auth = {
-        username: process.env.MONGO_USERNAME,
-        password: process.env.MONGO_PASSWORD
-      };
-      connectionParams.authSource = 'admin';          // Important!
+    if (process.env.USE_DB_AUTH === 'true') {
+      options.user = process.env.MONGO_USERNAME;
+      options.pass = process.env.MONGO_PASSWORD;
     }
 
-    const connStr = process.env.MONGO_CONN_STR;
-    console.log('Connecting to:', connStr.replace(/\/\/.*@/, '//***:***@'));
-    
-    await mongoose.connect(connStr, connectionParams);
-    console.log("Connected to MongoDB successfully!");
+    await mongoose.connect(process.env.MONGO_CONN_STR, options);
 
+    console.log('Connected to database');
   } catch (error) {
-    console.error("MongoDB connection failed:", error.message);
+    console.error('Could not connect to database:', error.message);
     process.exit(1);
   }
 };

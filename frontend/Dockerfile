@@ -4,7 +4,7 @@
 # Uses Node.js to install dependencies and build the
 # React application into static files.
 # ======================================================
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 
 # Set working directory inside the container
 WORKDIR /app
@@ -13,13 +13,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install project dependencies
-RUN yarn install
+RUN npm install --production
 
 # Copy the rest of the application source code
 COPY . .
 
 # Build the React application, the output is generated in the /app/build directory
-RUN yarn build
+RUN npm run build
 
 
 # ======================================================

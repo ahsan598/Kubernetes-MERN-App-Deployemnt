@@ -1,42 +1,56 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Directory used by npm
+# ===============================
+# Node dependencies & logs
+# ===============================
 node_modules
 npm-debug.log
+pnpm-lock.yaml
+logs
+*.log
 
-# Directory used by yarn
-yarn-error.log
+# ===============================
+# Git / version control
+# ===============================
+.git
+.gitignore
 
-# Optional npm cache directory
-.npm
+# ===============================
+# Environment files (SECRETS!)
+# ===============================
+.env
+.env.*
 
-# Optional eslint cache
-.eslintcache
+# ===============================
+# Tests & coverage
+# ===============================
+.nyc_output
+coverage
+__tests__
+test-results
 
-# Optional REPL history
-.node_repl_history
-
-# IDE / editor directories
-.vscode/
-.idea/
+# ===============================
+# IDE & editor files
+# ===============================
+.vscode
+.idea
 *.swp
 *.swo
-*.swn
-*.bak
 
-# OS generated files
+# ===============================
+# OS system files
+# ===============================
 .DS_Store
 Thumbs.db
-*.lock
 
-# Build DIR
+# ===============================
+# Build & temp artifacts
+# ===============================
+dist
 build
+.tmp
+.cache
+
+# ===============================
+# Documentation
+# ===============================
+README.md
+docs

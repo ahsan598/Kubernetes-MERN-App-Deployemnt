@@ -1,14 +1,14 @@
 # Use minimal Node image as a base image
-FROM node:20-alpine
+FROM node:24-alpine
 
 # Set the working directory in the container
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Copy the package.json
+# Copy the package.json & package-lock.json files
 COPY package*.json ./
 
 # Install the application's dependencies inside the container
-RUN yarn install --production
+RUN npm install --production
 
 # Copy the rest of the application code to the container
 COPY . .
@@ -17,7 +17,7 @@ COPY . .
 USER node
 
 # Expose Port to the container
-EXPOSE 3000
+EXPOSE 8080
 
 # Specify the command to run when the container starts
 CMD [ "node", "index.js" ]

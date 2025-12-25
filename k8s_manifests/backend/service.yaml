@@ -2,14 +2,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-service
-  namespace: dev
+  name: backend-svc
+  namespace: todo-lab
+  labels:
+    app: todo-backend
+    env: dev
 spec:
   type: ClusterIP
   selector:
-    app: backend      # Matching deployment label
+    app: todo-backend
   ports:
-  - port: 8080        # Service port
-    targetPort: 8080  # Container port
+  - port: 8080
+    targetPort: backend-port
     protocol: TCP
-    name: http

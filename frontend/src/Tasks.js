@@ -1,59 +1,73 @@
-import { Component } from "react";
-import { addTask, getTasks, updateTask, deleteTask } from "./services/taskServices";
+import {
+  addTask,
+  getTasks,
+  updateTask,
+  deleteTask,
+} from './services/taskServices';
 
-class Tasks extends Component {
-  state = { tasks: [], currentTask: "" };
+class Tasks {
+  constructor(component) {
+    this.component = component;
+  }
 
-  async componentDidMount() {
+  async loadTasks() {
     try {
       const { data } = await getTasks();
-      this.setState({ tasks: data });
+      this.component.setState({ tasks: data });
     } catch (error) {
-      console.error("API failed", error);
-      this.setState({ tasks: [] });
+      console.error(error);
     }
   }
 
-  handleChange = ({ currentTarget: input }) => {
-    this.setState({ currentTask: input.value });
+  handleChange = (e) => {
+    this.component.setState({ currentTask: e.target.value });
   };
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    const originalTasks = this.state.tasks;
+
+    const { tasks, currentTask } = this.component.state;
+
     try {
-      const { data } = await addTask({ task: this.state.currentTask });
-      const tasks = [...originalTasks, data];  // ✅ Immutable update
-      this.setState({ tasks, currentTask: "" });
+      const { data } = await addTask({ task: currentTask });
+      this.component.setState({
+        tasks: [...tasks, data],
+        currentTask: ''
+      });
     } catch (error) {
-      console.error("Add task failed", error);
+      console.error(error);
     }
   };
 
-  handleUpdate = async (currentTask) => {
-    const originalTasks = this.state.tasks;
+  handleUpdate = async (id) => {
+    const originalTasks = [...this.component.state.tasks];
+
     try {
-      const tasks = [...originalTasks];
-      const index = tasks.findIndex((task) => task._id === currentTask);
-      tasks[index] = { ...tasks[index] };
-      tasks[index].completed = !tasks[index].completed;
-      this.setState({ tasks });
-      await updateTask(currentTask, { completed: tasks[index].completed });
+      const tasks = originalTasks.map(task =>
+        task._id === id ? { ...task, completed: !task.completed } : task
+      );
+
+      this.component.setState({ tasks });
+
+      const updatedTask = tasks.find(task => task._id === id);
+      await updateTask(id, { completed: updatedTask.completed });
+
     } catch (error) {
-      this.setState({ tasks: originalTasks });
-      console.error("Update failed", error);
+      this.component.setState({ tasks: originalTasks });
+      console.error(error);
     }
   };
 
-  handleDelete = async (currentTask) => {
-    const originalTasks = this.state.tasks;
+  handleDelete = async (id) => {
+    const originalTasks = [...this.component.state.tasks];
+
     try {
-      const tasks = originalTasks.filter((task) => task._id !== currentTask);
-      this.setState({ tasks });
-      await deleteTask(currentTask);
+      const tasks = originalTasks.filter(task => task._id !== id);
+      this.component.setState({ tasks });
+      await deleteTask(id);
     } catch (error) {
-      this.setState({ tasks: originalTasks });
-      console.error("Delete failed", error);
+      this.component.setState({ tasks: originalTasks });
+      console.error(error);
     }
   };
 }

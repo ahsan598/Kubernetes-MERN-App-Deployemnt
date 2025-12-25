@@ -3,11 +3,12 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mongodb
-  namespace: dev
+  namespace: todo-lab
   labels:
     app: mongodb
+    env: dev
 spec:
-  serviceName: mongodb-service
+  serviceName: mongodb-svc
   replicas: 1
   selector:
     matchLabels:
@@ -19,17 +20,12 @@ spec:
     spec:
       containers:
       - name: mongodb
-        image: mongo:7.0
+        image: mongo:8.0
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 27017
-          name: mongodb
-        command:
-        - "mongod"
-        - "--auth"
-        - "--wiredTigerCacheSizeGB"
-        - "0.25"
-        - "--bind_ip_all"
+        - name: mongodb
+          containerPort: 27017
+
         env:
         - name: MONGO_INITDB_ROOT_USERNAME
           valueFrom:
@@ -41,10 +37,11 @@ spec:
             secretKeyRef:
               name: mongo-secret
               key: password
-        # Volume mount for data persistence
+
         volumeMounts:
         - name: mongodb-storage
           mountPath: /data/db
+
         resources:
           requests:
             memory: "512Mi"
@@ -52,13 +49,12 @@ spec:
           limits:
             memory: "1Gi"
             cpu: "500m"
-        # Health checks
+
         livenessProbe:
           tcpSocket:
             port: 27017
           initialDelaySeconds: 30
           periodSeconds: 10
-          timeoutSeconds: 2
         readinessProbe:
           exec:
             command:
@@ -67,7 +63,7 @@ spec:
             - "db.adminCommand('ping')"
           initialDelaySeconds: 10
           periodSeconds: 5
-          timeoutSeconds: 5
+
   volumeClaimTemplates:
   - metadata:
       name: mongodb-storage

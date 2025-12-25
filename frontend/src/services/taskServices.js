@@ -1,21 +1,21 @@
-import axios from "axios";
+import axios from 'axios';
 
-const apiUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:8080/api/tasks";
+const api = axios.create({
+  baseURL: process.env.REACT_APP_BACKEND_URL,
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
 
-console.log("API URL:", apiUrl);
+// Get all tasks
+export const getTasks = () => api.get('/');
 
-export function getTasks() {
-  return axios.get(apiUrl);
-}
+// Add task
+export const addTask = (task) => api.post('/', task);
 
-export function addTask(task) {
-  return axios.post(apiUrl, task);
-}
+// Update task
+export const updateTask = (id, task) => api.put(`/${id}`, task);
 
-export function updateTask(id, task) {
-  return axios.put(`${apiUrl}/${id}`, task);
-}
-
-export function deleteTask(id) {
-  return axios.delete(`${apiUrl}/${id}`);
-}
+// Delete task
+export const deleteTask = (id) => api.delete(`/${id}`);
