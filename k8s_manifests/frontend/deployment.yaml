@@ -59,4 +59,4 @@ spec:
       volumes:
       - name: nginx-config
         configMap:
-          name: frontend-nginx-config
+          name: frontend-config

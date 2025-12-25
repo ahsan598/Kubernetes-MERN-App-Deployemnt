@@ -48,6 +48,9 @@ kubectl apply -f frontend/
 # 5. Check status
 kubectl get all -n dev
 kubectl get pvc -n dev
+
+kubectl delete -n todo-lab --all
+kubectl delete pvc -n todo-lab --all
 ```
 
 ### Install NGINX Ingress Controller
